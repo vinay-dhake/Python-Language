@@ -1,3100 +1,2454 @@
-# 🐍 Complete Python Programming Series – Lecture 21
-
-# Globals, Locals & Argument Passing
-
-> **Lecture 21 Topics**
->
-> - Global Variables
-> - Local Variables
-> - Variable Scope
-> - Variable Lifetime
-> - Execution Flow
-> - NameError
-> - Variable Lookup
-> - Interview Notes
+# Python Programming 🐍
+## Anonymous (Lambda) Functions & Introduction to `map()
+> **Topic:** Anonymous (Lambda) Functions & `map()` Function
 
 ---
 
-# 📚 Introduction
+# Table of Contents
 
-In the previous lectures, we learned how to create functions and pass arguments to them. However, one important question still remains:
+- Introduction
+- What are Anonymous Functions?
+- Why are they called Lambda Functions?
+- Features of Lambda Functions
+- Syntax of Lambda Functions
+- Understanding Expressions
+- What Can Be Written Inside a Lambda?
+- Restrictions of Lambda Functions
+- Creating Lambda Functions
+- Why Lambda Functions are Needed
+- Ways to Use Lambda Functions
+- Lambda Examples
+- Practical Exercises
+- Introduction to `map()`
+- Summary
 
-> **How does Python know which variable to use inside a function?**
+---
 
-For example,
+# Introduction
+
+Until now, we have been creating our own functions using the `def` keyword.
+
+Example:
 
 ```python
-x = 10
-
-def show():
-    print(x)
+def add(a, b):
+    return a + b
 ```
 
-Where does Python find the variable `x`?
+This is known as a **named function** because the function has a name (`add`).
+
+Python also provides another way to create functions **without giving them any name**.
+
+These are called:
+
+- Anonymous Functions
+- Lambda Functions
+
+This lecture introduces one of the most important Python concepts that is widely used in
+
+- Data Science
+- Machine Learning
+- Automation
+- Functional Programming
+
+and later with built-in functions like
+
+- `map()`
+- `filter()`
+- `reduce()`
+
+---
+
+# Today's Agenda
+
+According to the lecture slides:
+
+- User Defined Functions – IV
+- Anonymous Functions (Lambda Functions)
+
+This lecture mainly focuses on understanding **Lambda Functions**, their syntax, limitations, and practical applications before introducing the **`map()`** function.
+
+---
+
+# What are Anonymous Functions?
+
+An **Anonymous Function** is simply a function **without a name**.
+
+Normally, we create functions using the `def` keyword.
+
+Example:
+
+```python
+def greet():
+    print("Hello")
+```
+
+Here,
+
+```text
+greet
+```
+
+is the name of the function.
+
+Instead of using `def`, Python allows us to create functions using the **`lambda`** keyword.
+
+Example:
+
+```python
+lambda: print("Hello")
+```
+
+Notice that this function has **no name**.
+
+Therefore,
+
+- Normal Function → uses `def`
+- Anonymous Function → uses `lambda`
+
+Hence,
+
+> **Anonymous Functions are also called Lambda Functions.**
+
+---
+
+# Why are they called Lambda Functions?
+
+Python uses the keyword
+
+```python
+lambda
+```
+
+to create anonymous functions.
+
+Therefore,
+
+Anonymous Function = Lambda Function
+
+Both terms mean exactly the same thing.
+
+---
+
+# Characteristics of Lambda Functions
+
+A Lambda Function is
+
+- Small
+- Anonymous
+- Usually written in one line
+- Returns a value automatically
+- Mostly used for short operations
+
+Unlike normal functions, lambda functions are **not intended for writing long business logic**.
+
+Instead, they are designed for **small one-line tasks**.
+
+---
+
+# Normal Function vs Lambda Function
+
+| Normal Function | Lambda Function |
+|----------------|-----------------|
+| Uses `def` | Uses `lambda` |
+| Has a name | No name |
+| Multiple statements allowed | Only one expression |
+| Uses `return` keyword | Returns automatically |
+| Better for long programs | Better for short operations |
+| Easy for complex logic | Easy for one-line logic |
+
+---
+
+# Why Do We Need Lambda Functions?
+
+A common question is:
+
+> **If we can already create functions using `def`, why do we need Lambda Functions?**
+
+The answer is simple.
+
+Suppose we only need a function **once**.
+
+Creating an entire named function becomes unnecessary.
+
+Example:
+
+```python
+def square(x):
+    return x * x
+```
+
+If this function is used only one time,
+
+writing all these lines becomes unnecessary.
+
+Instead,
+
+```python
+lambda x: x * x
+```
+
+does exactly the same work in a single line.
+
+This is the biggest advantage of lambda functions.
+
+---
+
+# Real-Life Analogy
+
+Imagine you need a calculator only once to add two numbers.
+
+Instead of purchasing a complete calculator,
+
+you borrow one from a friend,
+
+perform the addition,
+
+and return it.
 
 Similarly,
 
-```python
-def show():
-    x = 20
-```
-
-Is this `x` the same as the previous one?
-
-To answer these questions, Python introduces the concept of **Variable Scope**.
+Lambda Functions are temporary, lightweight functions created for very small tasks.
 
 ---
 
-# What is Variable Scope?
+# Key Points
 
-Variable Scope defines **where a variable can be accessed inside a program**.
+- Lambda functions have no name.
+- They are created using the `lambda` keyword.
+===============================================================================================================================================================
+# Syntax of Lambda Functions
 
-In simple words,
+After understanding **what Lambda Functions are** and **why they are used**, let's learn their syntax.
 
-> Scope tells Python **which parts of the program are allowed to use a variable**.
-
-Not every variable can be accessed everywhere.
-
-Some variables are available throughout the entire program, while others exist only inside a specific function.
-
----
-
-# Why Do We Need Scope?
-
-Imagine writing a Python project with thousands of variables.
-
-If every variable were accessible everywhere:
-
-- Variables would accidentally overwrite each other.
-- Debugging would become difficult.
-- Programs would become confusing.
-- Functions would no longer remain independent.
-
-Scope solves this problem by restricting where variables can be used.
-
----
-
-# Types of Variables Covered in this Lecture
-
-This lecture mainly discusses two types of variables.
-
-| Variable Type | Declared | Accessible |
-|---------------|----------|------------|
-| Global Variable | Outside a function | Entire program |
-| Local Variable | Inside a function | Only inside that function |
-
----
-
-# Global Variables
-
-A variable declared **outside every function** is called a **Global Variable**.
+Unlike normal functions, Lambda Functions have a very compact syntax.
 
 ## Syntax
 
 ```python
-name = "Sachin"
-age = 25
-country = "India"
+lambda arguments : expression
 ```
 
-All the above variables are global variables.
-
----
-
-## Characteristics of Global Variables
-
-- Declared outside every function.
-- Created in global memory.
-- Accessible throughout the program.
-- Can be read inside functions.
-- Exist until the program terminates.
-
----
-
-# Example 1 – Accessing a Global Variable
+General form:
 
 ```python
-s = "I love Python"
-
-def f():
-    print(s)
-
-f()
+lambda parameter1, parameter2, ... : expression
 ```
 
-### Output
+### Components of Lambda Syntax
 
-```text
-I love Python
-```
+A Lambda Function consists of only **three parts**.
 
----
-
-## Explanation
-
-Initially,
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-The function `f()` contains only one statement.
-
-```python
-print(s)
-```
-
-Python first searches for a **local variable** named `s`.
-
-Since no local variable exists, Python searches the **global scope**.
-
-The global variable is found successfully.
-
-Therefore,
-
-```text
-I love Python
-```
-
-is printed.
-
----
-
-# Variable Lookup Order (Simplified)
-
-Whenever Python encounters
-
-```python
-print(variable)
-```
-
-it searches in the following order:
-
-```text
-Inside Function
-
-↓
-
-Local Variable?
-
-↓
-
-Yes → Use Local Variable
-
-↓
-
-No
-
-↓
-
-Search Global Variable
-
-↓
-
-Found?
-
-↓
-
-Yes → Use Global Variable
-
-↓
-
-No
-
-↓
-
-NameError
-```
-
----
-
-# Example 2 – Global Variable Declared After Function Definition
-
-```python
-def f():
-    print(s)
-
-s = "I love Python"
-
-f()
-```
-
-### Output
-
-```text
-I love Python
-```
-
----
-
-## Why Does It Work?
-
-Many beginners think the global variable must always appear before the function definition.
-
-This is incorrect.
-
-Python only **stores** the function definition.
-
-The function body is **not executed** until the function is called.
-
-Execution Flow:
-
-```text
-Function Definition
-
-↓
-
-Stored in Memory
-
-↓
-
-Global Variable Created
-
-↓
-
-Function Call
-
-↓
-
-print(s)
-
-↓
-
-Global Variable Found
-
-↓
-
-Output
-```
-
-Since the variable exists before `f()` executes, everything works correctly.
-
----
-
-# Example 3 – Global Variable Declared After Function Call
-
-```python
-def f():
-    print(s)
-
-f()
-
-s = "I love Python"
-```
-
-### Output
-
-```text
-NameError:
-name 's' is not defined
-```
-
----
-
-## Why Does This Fail?
-
-Python executes programs **line by line**.
-
-Execution Flow:
-
-```text
-Function Definition
-
-↓
-
-Function Call
-
-↓
-
-print(s)
-
-↓
-
-Search Local Variable
-
-↓
-
-Not Found
-
-↓
-
-Search Global Variable
-
-↓
-
-Not Found
-
-↓
-
-NameError
-
-↓
-
-Program Stops
-```
-
-The statement
-
-```python
-s = "I love Python"
-```
-
-is never reached because the program has already terminated.
-
----
-
-# NameError
-
-Whenever Python cannot find a variable in the current scope, it raises
-
-```text
-NameError
-```
-
-Common reasons:
-
-- Variable not created.
-- Variable created after use.
-- Misspelled variable name.
-- Local variable accessed outside its function.
-
----
-
-# Local Variables
-
-A variable declared inside a function is called a **Local Variable**.
+1. **`lambda` keyword**
+2. **Arguments (Parameters)**
+3. **Expression**
 
 Example
 
 ```python
-def show():
-
-    x = 10
-    y = 20
-
-    print(x)
+lambda a, b : a + b
 ```
 
-Both `x` and `y` are local variables.
+Here,
+
+- `lambda` → Keyword
+- `a, b` → Parameters
+- `a + b` → Expression
 
 ---
 
-## Characteristics of Local Variables
+# Understanding the Syntax
 
-- Declared inside functions.
-- Created only when the function starts executing.
-- Accessible only inside that function.
-- Automatically destroyed after function execution.
+Let's compare a normal function with a lambda function.
 
----
-
-# Example 4 – Local Variable Lifetime
+## Normal Function
 
 ```python
-def f():
-
-    s = "I love Python"
-
-f()
-
-print(s)
+def add(a, b):
+    return a + b
 ```
 
-### Output
-
-```text
-NameError
-```
-
----
-
-## Explanation
-
-When `f()` starts,
-
-Python creates
-
-```text
-s
-```
-
-inside the function.
-
-After the function finishes,
-
-Python removes the local variable from memory.
-
-Later,
+The same function using Lambda becomes
 
 ```python
-print(s)
+lambda a, b: a + b
 ```
 
-tries to access it.
-
-Since the variable no longer exists,
-
-Python raises
-
-```text
-NameError
-```
+Notice how much shorter it is.
 
 ---
 
-# Memory Diagram
+# Rule 1 — Lambda Must Start with `lambda`
 
-During Function Execution
-
-```text
-Function Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-After Function Ends
-
-```text
-Function Memory Destroyed
-
-↓
-
-s Removed
-```
-
-Outside the function
+Every Lambda Function must begin with the keyword
 
 ```python
-print(s)
+lambda
 ```
 
-results in
+Example
+
+```python
+lambda x: x*x
+```
+
+Without the keyword
+
+```python
+x:x*x
+```
+
+Python will generate a syntax error.
+
+---
+
+# Rule 2 — No Function Name
+
+Unlike a normal function,
+
+```python
+def add():
+```
+
+Lambda Functions do **not** have names.
+
+Normal Function
+
+```python
+def add(a,b):
+    return a+b
+```
+
+Lambda Function
+
+```python
+lambda a,b:a+b
+```
+
+Notice
+
+There is no function name like
 
 ```text
-NameError
+add
+```
+
+This is why Lambda Functions are called **Anonymous Functions**.
+
+---
+
+# Rule 3 — Arguments Do Not Use Parentheses
+
+Normal Function
+
+```python
+def add(a,b):
+```
+
+Lambda Function
+
+```python
+lambda a,b:
+```
+
+There are **no parentheses** around the parameter list.
+
+Correct
+
+```python
+lambda a,b:a+b
+```
+
+Incorrect
+
+```python
+lambda (a,b):a+b
 ```
 
 ---
 
-# Lifetime of Local Variables
+# Rule 4 — Colon (`:`)
 
-A local variable exists only while the function is executing.
+A colon separates the parameters from the expression.
 
-```text
-Function Call
+General Syntax
+
+```python
+lambda arguments : expression
+```
+
+Example
+
+```python
+lambda x:x*x
+```
+
+Everything before the colon
 
 ↓
 
-Local Variable Created
+Arguments
+
+Everything after the colon
 
 ↓
 
-Function Executes
+Expression
 
-↓
+---
 
-Function Returns
+# Rule 5 — Only One Expression
 
-↓
+This is the most important rule.
 
-Local Variable Destroyed
+A Lambda Function can contain **only one expression**.
+
+Correct
+
+```python
+lambda a,b:a+b
+```
+
+Incorrect
+
+```python
+lambda a,b:
+
+x=a+b
+
+return x
+```
+
+The above code is invalid because Lambda Functions do not support multiple statements.
+
+---
+
+# What is an Expression?
+
+Many students confuse **statements** and **expressions**.
+
+An **expression** is anything that produces a value.
+
+Examples
+
+```python
+10+20
+```
+
+```python
+x*x
+```
+
+```python
+len(name)
+```
+
+```python
+a>b
+```
+
+```python
+"Even" if n%2==0 else "Odd"
+```
+
+All of these produce a value.
+
+Hence,
+
+they are valid expressions.
+
+---
+
+# Expression vs Statement
+
+| Expression | Statement |
+|------------|-----------|
+| Produces a value | Performs an action |
+| Can appear inside Lambda | Cannot appear inside Lambda (mostly) |
+
+Examples of expressions
+
+```python
+a+b
+```
+
+```python
+x*x
+```
+
+```python
+len(s)
+```
+
+Examples of statements
+
+```python
+for
+```
+
+```python
+while
+```
+
+```python
+if
+```
+
+```python
+return
+```
+
+```python
+=
+```
+
+Statements generally cannot be used inside Lambda Functions.
+
+---
+
+# Rule 6 — No `return` Keyword
+
+A normal function requires
+
+```python
+return
+```
+
+Example
+
+```python
+def square(x):
+    return x*x
+```
+
+Lambda Functions automatically return the evaluated expression.
+
+Therefore,
+
+Correct
+
+```python
+lambda x:x*x
+```
+
+Incorrect
+
+```python
+lambda x:return x*x
+```
+
+Python automatically evaluates the expression after the colon and returns the result.
+
+---
+
+# Rule 7 — No Assignment Operator
+
+Assignments are not allowed inside Lambda Functions.
+
+Incorrect
+
+```python
+lambda x:y=x*x
+```
+
+Incorrect
+
+```python
+lambda x:x=10
+```
+
+Assignments are statements.
+
+Lambda supports only expressions.
+
+---
+
+# Rule 8 — No Loops
+
+Loops are statements.
+
+Therefore,
+
+they cannot be written inside Lambda Functions.
+
+Incorrect
+
+```python
+lambda x:
+
+for i in range(5):
+
+print(i)
+```
+
+Similarly,
+
+```python
+while
+```
+
+is also not allowed.
+
+---
+
+# Rule 9 — Single-Line If-Else is Allowed
+
+Although normal `if` statements are not allowed,
+
+Python allows **conditional expressions**.
+
+Example
+
+```python
+lambda n:"Even" if n%2==0 else "Odd"
+```
+
+This is a valid expression.
+
+Hence,
+
+it is perfectly valid inside a Lambda Function.
+
+---
+
+# Rule 10 — Function Calls are Allowed
+
+Calling another function is perfectly valid.
+
+Example
+
+```python
+lambda x:len(x)
+```
+
+Example
+
+```python
+lambda x:abs(x)
+```
+
+Example
+
+```python
+lambda x:print(x)
+```
+
+Since function calls return values,
+
+they are expressions.
+
+---
+
+# Summary of Allowed Operations
+
+The lecture explains that the following operations are allowed because they are expressions.
+
+✅ Arithmetic Operations
+
+```python
+lambda x:x+5
+```
+
+```python
+lambda x:x*x
 ```
 
 ---
 
-# Global vs Local Variables
+✅ Relational Operations
 
-| Global Variable | Local Variable |
-|-----------------|----------------|
-| Declared outside functions | Declared inside functions |
-| Accessible throughout the program | Accessible only inside the function |
-| Exists until program termination | Destroyed after function execution |
-| Shared across functions | Private to one function |
+```python
+lambda x:x>10
+```
+
+---
+
+✅ Logical Operations
+
+```python
+lambda x:x>5 and x<20
+```
+
+---
+
+✅ String Operations
+
+```python
+lambda s:s.upper()
+```
+
+---
+
+✅ Function Calls
+
+```python
+lambda s:len(s)
+```
+
+---
+
+✅ Single-Line If-Else
+
+```python
+lambda n:"Even" if n%2==0 else "Odd"
+```
+
+---
+
+# Summary of Restrictions
+
+The following are **not allowed** inside a Lambda Function.
+
+❌ Multiple statements
+
+❌ Assignment (`=`)
+
+❌ `for` loop
+
+❌ `while` loop
+
+❌ Normal `if` statement
+
+❌ `return` keyword
+
+❌ Multi-line function body
 
 ---
 
 # Interview Questions
 
-### Q1. What is a Global Variable?
+### Q1. What is the syntax of a Lambda Function?
 
-A variable declared outside every function.
-
----
-
-### Q2. What is a Local Variable?
-
-A variable declared inside a function.
+```python
+lambda arguments: expression
+```
 
 ---
 
-### Q3. Can a function read a global variable?
+### Q2. Why is `return` not used inside Lambda Functions?
+
+Because Python automatically returns the evaluated expression.
+
+---
+
+### Q3. Can a Lambda Function contain multiple statements?
+
+**No.**
+
+A Lambda Function can contain only one expression.
+
+---
+
+### Q4. Can we use loops inside Lambda Functions?
+
+**No.**
+
+`for` and `while` are statements.
+
+---
+
+### Q5. Can we use Single-Line If-Else?
 
 **Yes.**
 
----
-
-### Q4. When are local variables destroyed?
-
-Immediately after the function returns.
+Because it is an expression.
 
 ---
 
-### Q5. Which error occurs when Python cannot find a variable?
+# Key Takeaways
+
+- Lambda Functions use the syntax `lambda arguments: expression`.
+- They consist of a single expression.
+- Parentheses are not used around parameters.
+- The `return` keyword is not required.
+- Assignment statements are not allowed.
+- Loops are not allowed.
+- Single-line conditional expressions are allowed.
+- Lambda Functions automatically return the value of the expression.
+
+---
+
+> **End of Part 2**
+==============================================================================================================================================================
+# Creating Lambda Functions
+
+Now that we understand the syntax and rules of Lambda Functions, let's create our first Lambda Function.
+
+In this section, we will compare every Lambda Function with its equivalent **normal function** so that the difference becomes crystal clear.
+
+---
+
+# Example 1 – Addition of Three Numbers
+
+The first classroom example was to create a function that adds three numbers.
+
+## Using a Normal Function
+
+```python
+def add(a, b, c):
+    x = a + b + c
+    return x
+
+result = add(2, 3, 4)
+print(result)
+```
+
+### Output
 
 ```text
-NameError
+9
+```
+
+---
+
+## Dry Run
+
+Step 1
+
+```python
+add(2,3,4)
+```
+
+is called.
+
+---
+
+Step 2
+
+The parameters receive
+
+```text
+a = 2
+b = 3
+c = 4
+```
+
+---
+
+Step 3
+
+```python
+x = a+b+c
+```
+
+becomes
+
+```text
+x = 9
+```
+
+---
+
+Step 4
+
+```python
+return x
+```
+
+returns
+
+```text
+9
+```
+
+---
+
+Step 5
+
+```python
+print(result)
+```
+
+prints
+
+```text
+9
+```
+
+---
+
+# The Same Example Using Lambda
+
+```python
+x = lambda a, b, c: a + b + c
+```
+
+Many beginners think this executes the function.
+
+**It does NOT.**
+
+This line **only creates a Lambda Function** and stores its reference inside the variable `x`.
+
+---
+
+## What is Stored in `x`?
+
+The variable
+
+```python
+x
+```
+
+does **not** store the answer.
+
+Instead,
+
+it stores the **reference (memory address)** of the Lambda Function.
+
+Think of it exactly like this:
+
+```python
+def add(a,b,c):
+    return a+b+c
+```
+
+Here,
+
+```python
+add
+```
+
+stores the function's reference.
+
+Similarly,
+
+```python
+x = lambda a,b,c:a+b+c
+```
+
+stores the lambda function's reference.
+
+---
+
+# Calling the Lambda Function
+
+Just like a normal function,
+
+we call the Lambda Function using parentheses.
+
+```python
+x = lambda a, b, c: a + b + c
+
+result = x(2, 3, 4)
+
+print(result)
+```
+
+### Output
+
+```text
+9
+```
+
+---
+
+## Dry Run
+
+Initially
+
+```python
+x = lambda a,b,c:a+b+c
+```
+
+creates the function.
+
+No calculation happens.
+
+---
+
+Later
+
+```python
+x(2,3,4)
+```
+
+executes the function.
+
+Parameters become
+
+```text
+a = 2
+b = 3
+c = 4
+```
+
+Expression
+
+```python
+a+b+c
+```
+
+becomes
+
+```text
+9
+```
+
+Python automatically returns
+
+```text
+9
+```
+
+without writing the `return` keyword.
+
+---
+
+# Memory Representation
+
+```
+Variable
+
+↓
+
+x
+
+↓
+
+Lambda Function
+
+↓
+
+lambda a,b,c:a+b+c
+```
+
+The function executes **only** when
+
+```python
+x(...)
+```
+
+is called.
+
+---
+
+# Defining and Calling in One Line
+
+The instructor also demonstrated another style where the Lambda Function is defined **and immediately executed**.
+
+```python
+print((lambda a, b, c: a + b + c)(2, 3, 4))
+```
+
+### Output
+
+```text
+9
+```
+
+---
+
+## How Does This Work?
+
+Let's divide the statement.
+
+First,
+
+```python
+lambda a,b,c:a+b+c
+```
+
+creates the anonymous function.
+
+Immediately after that,
+
+```python
+(2,3,4)
+```
+
+calls it.
+
+Equivalent to
+
+```python
+def add(a,b,c):
+    return a+b+c
+
+print(add(2,3,4))
+```
+
+Everything happens in one line.
+
+---
+
+# Example 2 – Lambda Without Arguments
+
+Many beginners think Lambda Functions must always have parameters.
+
+This is incorrect.
+
+A Lambda Function can also have **zero arguments**.
+
+Example
+
+```python
+import math
+
+x = lambda: math.pi
+
+print(x())
+```
+
+### Output
+
+```text
+3.141592653589793
+```
+
+---
+
+## Explanation
+
+Notice carefully.
+
+There are **no parameters**.
+
+```python
+lambda:
+```
+
+is perfectly valid.
+
+The expression
+
+```python
+math.pi
+```
+
+is evaluated.
+
+Its value is automatically returned.
+
+---
+
+# Dry Run
+
+Step 1
+
+```python
+lambda: math.pi
+```
+
+creates the function.
+
+---
+
+Step 2
+
+```python
+x()
+```
+
+calls the function.
+
+---
+
+Step 3
+
+Expression
+
+```python
+math.pi
+```
+
+is evaluated.
+
+---
+
+Step 4
+
+Python automatically returns
+
+```text
+3.141592653589793
+```
+
+---
+
+# Why No `return`?
+
+Normal Function
+
+```python
+def get_pi():
+    return math.pi
+```
+
+Lambda
+
+```python
+lambda: math.pi
+```
+
+Python automatically returns the value of the expression.
+
+---
+
+# Comparison – Normal Function vs Lambda
+
+## Normal Function
+
+```python
+def add(a,b,c):
+    x=a+b+c
+    return x
+```
+
+---
+
+## Lambda Function
+
+```python
+lambda a,b,c:a+b+c
+```
+
+---
+
+## Normal Function
+
+```python
+def get_pi():
+    return math.pi
+```
+
+---
+
+## Lambda Function
+
+```python
+lambda:math.pi
+```
+
+---
+
+# Advantages Seen So Far
+
+Compared to normal functions,
+
+Lambda Functions
+
+- require less code
+- are easier to write
+- are useful for one-time operations
+- automatically return the result
+- eliminate unnecessary function definitions
+
+---
+
+# Interview Questions
+
+### Q1. Does defining a Lambda Function execute it?
+
+**No.**
+
+It only creates the function object.
+
+---
+
+### Q2. What does the variable store?
+
+It stores the **reference (memory address)** of the Lambda Function.
+
+---
+
+### Q3. Can a Lambda Function have zero parameters?
+
+**Yes.**
+
+Example
+
+```python
+lambda: math.pi
+```
+
+---
+
+### Q4. Can a Lambda Function be called immediately after creation?
+
+**Yes.**
+
+Example
+
+```python
+(lambda a,b:a+b)(2,3)
 ```
 
 ---
 
 # Key Takeaways
 
-- Scope determines where a variable can be accessed.
-- Global variables are accessible throughout the program.
-- Local variables exist only inside functions.
-- Python executes programs sequentially.
-- Function definitions are stored but not executed immediately.
-- Local variables are destroyed after function execution.
-- Accessing an unavailable variable raises `NameError`.
+- A Lambda Function is created using the `lambda` keyword.
+- Creating a Lambda Function does not execute it.
+- The variable stores the function's reference.
+- Lambda Functions are called exactly like normal functions.
+- A Lambda Function can have zero or more parameters.
+- Lambda Functions can be defined and executed in a single statement.
+- Python automatically returns the result of the expression.
 
 ---
 
-> **End of Part 1**
-===============================================================================================================================================================
-# Variable Shadowing and the `global` Keyword
+# Next Topic
 
-In the previous section, we learned that a function can directly **read a global variable**. However, an important question arises:
+In the next section, we'll solve all the practical classroom exercises:
 
-> **What happens if a function creates another variable having the same name as a global variable?**
+- Return the first character of a string
+- Return the last character of a string
+- Check whether a number is even
+- Return "Even" or "Odd"
+- Find the maximum of two numbers using Lambda Functions
 
-Will Python modify the global variable?
+These are the exact examples demonstrated during the lecture.
 
-Or
+> **End of Part 3**
+==============================================================================================================================================================
+# Practical Exercises Using Lambda Functions
 
-Will Python create a completely new variable?
+After learning the syntax of Lambda Functions, the instructor solved several practical examples in class.
 
-The answer introduces one of the most important concepts in Python programming:
-
-> **Variable Shadowing**
-
-Understanding this concept is essential before learning the `global` keyword.
-
----
-
-# What is Variable Shadowing?
-
-Variable Shadowing occurs when a **local variable has the same name as a global variable**.
-
-In this situation,
-
-the local variable **hides** the global variable inside that function.
-
-In other words,
-
-inside the function,
-
-Python completely ignores the global variable and starts using the local variable instead.
+These examples demonstrate how Lambda Functions can replace small, simple functions written using the `def` keyword.
 
 ---
 
-# Example 1 – Variable Shadowing
+# Exercise 1 – Return the First Character of a String
+
+## Using a Normal Function
 
 ```python
-s = "I love Python"
+def first_char(string):
+    return string[0]
 
-def f():
-
-    s = "I love C"
-
-    print(s)
-
-f()
-
-print(s)
+print(first_char("Bhopal"))
+print(first_char("Sachin"))
 ```
 
 ### Output
 
 ```text
-I love C
-I love Python
+B
+S
 ```
 
 ---
 
-# Dry Run
-
-Initially,
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-Now,
-
-the function starts executing.
-
-Python encounters
+## Using Lambda Function
 
 ```python
-s = "I love C"
-```
+first_char = lambda string: string[0]
 
-Immediately,
-
-Python creates a **new local variable**.
-
-Memory now becomes
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-
-
-Function Memory
-
-↓
-
-s
-
-↓
-
-"I love C"
-```
-
-Notice that **two different variables** now exist.
-
-Although both have the same name,
-
-they belong to different scopes.
-
----
-
-# What Happens Inside the Function?
-
-Inside
-
-```python
-print(s)
-```
-
-Python follows its lookup rule.
-
-It first searches for
-
-```
-Local Variable
-```
-
-A local variable named
-
-```text
-s
-```
-
-exists.
-
-Therefore,
-
-Python prints
-
-```text
-I love C
-```
-
-without even checking the global variable.
-
----
-
-# What Happens After the Function Ends?
-
-Once the function finishes,
-
-its local memory is destroyed.
-
-The local variable disappears.
-
-Only the global variable remains.
-
-Therefore,
-
-```python
-print(s)
-```
-
-outside the function prints
-
-```text
-I love Python
-```
-
----
-
-# Memory Diagram
-
-Before Function Call
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-During Function Execution
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-
-
-Local Memory
-
-↓
-
-s
-
-↓
-
-"I love C"
-```
-
-After Function Ends
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-Local memory no longer exists.
-
----
-
-# Important Observation
-
-Many beginners think
-
-```python
-s = "I love C"
-```
-
-changes the global variable.
-
-It does **not**.
-
-Instead,
-
-Python creates an entirely new local variable.
-
----
-
-# Why Does Python Do This?
-
-Python follows a very simple rule.
-
-Whenever it sees an assignment inside a function,
-
-```python
-variable = value
-```
-
-it assumes
-
-that variable belongs to the local scope,
-
-unless instructed otherwise.
-
-This prevents accidental modification of global variables.
-
----
-
-# Interview Point
-
-> **Assignment inside a function creates a local variable by default.**
-
-Remember this statement.
-
-It explains many interview questions and programming errors.
-
----
-
-# Another Example
-
-```python
-x = 50
-
-def show():
-
-    x = 100
-
-    print("Inside:", x)
-
-show()
-
-print("Outside:", x)
+print(first_char("Bhopal"))
+print(first_char("Sachin"))
 ```
 
 ### Output
 
 ```text
-Inside: 100
-Outside: 50
+B
+S
 ```
-
-Again,
-
-the global variable remains unchanged because a new local variable was created.
 
 ---
 
-# Modifying Global Variables
+## Dry Run
 
-Suppose we actually want to modify the global variable.
+For
 
-Can we do that?
+```python
+first_char("Bhopal")
+```
+
+Parameter
+
+```text
+string = "Bhopal"
+```
+
+Expression
+
+```python
+string[0]
+```
+
+becomes
+
+```python
+"Bhopal"[0]
+```
+
+Result
+
+```text
+B
+```
+
+Python automatically returns
+
+```text
+B
+```
+
+---
+
+# Exercise 2 – Return the Last Character of a String
+
+Instead of positive indexing,
+
+the instructor used **negative indexing**.
+
+Remember,
+
+Python allows indexing from the end.
+
+```
+B h o p a l
+0 1 2 3 4 5
+
+-6 -5 -4 -3 -2 -1
+```
+
+Therefore,
+
+```python
+string[-1]
+```
+
+always returns the last character.
+
+---
+
+## Using Lambda Function
+
+```python
+last_char = lambda string: string[-1]
+
+print(last_char("Bhopal"))
+print(last_char("Sachin"))
+```
+
+### Output
+
+```text
+l
+n
+```
+
+---
+
+## Dry Run
+
+```python
+last_char("Sachin")
+```
+
+Parameter
+
+```text
+string = "Sachin"
+```
+
+Expression
+
+```python
+string[-1]
+```
+
+becomes
+
+```python
+"Sachin"[-1]
+```
+
+Result
+
+```text
+n
+```
+
+---
+
+# Exercise 3 – Check Whether a Number is Even
+
+The next classroom example was checking whether a number is even.
+
+Instead of returning the words
+
+```text
+Even
+```
+
+or
+
+```text
+Odd
+```
+
+the function returns a Boolean value.
+
+---
+
+## Lambda Function
+
+```python
+is_even = lambda n: n % 2 == 0
+
+print(is_even(7))
+print(is_even(10))
+```
+
+### Output
+
+```text
+False
+True
+```
+
+---
+
+## Explanation
+
+For
+
+```python
+is_even(7)
+```
+
+Expression
+
+```python
+7 % 2 == 0
+```
+
+becomes
+
+```python
+1 == 0
+```
+
+Result
+
+```text
+False
+```
+
+---
+
+For
+
+```python
+is_even(10)
+```
+
+Expression
+
+```python
+10 % 2 == 0
+```
+
+becomes
+
+```python
+0 == 0
+```
+
+Result
+
+```text
+True
+```
+
+---
+
+# Why Does It Return True or False?
+
+The expression
+
+```python
+n % 2 == 0
+```
+
+is a **relational expression**.
+
+Relational expressions always produce
+
+- True
+- False
+
+Therefore,
+
+Python automatically returns the Boolean value.
+
+---
+
+# Exercise 4 – Return "Even" or "Odd"
+
+The previous example returned only
+
+```text
+True
+```
+
+or
+
+```text
+False
+```
+
+Now the instructor wanted the Lambda Function to return
+
+```text
+Even
+```
+
+or
+
+```text
+Odd
+```
+
+using **Single-Line If-Else**.
+
+---
+
+## Lambda Function
+
+```python
+check_even_odd = lambda n: "Even" if n % 2 == 0 else "Odd"
+
+print(check_even_odd(7))
+print(check_even_odd(10))
+```
+
+### Output
+
+```text
+Odd
+Even
+```
+
+---
+
+## Dry Run
+
+### Input
+
+```python
+check_even_odd(7)
+```
+
+Expression
+
+```python
+"Even" if 7 % 2 == 0 else "Odd"
+```
+
+becomes
+
+```python
+"Even" if False else "Odd"
+```
+
+Result
+
+```text
+Odd
+```
+
+---
+
+### Input
+
+```python
+check_even_odd(10)
+```
+
+Expression
+
+```python
+"Even" if 10 % 2 == 0 else "Odd"
+```
+
+becomes
+
+```python
+"Even" if True else "Odd"
+```
+
+Result
+
+```text
+Even
+```
+
+---
+
+# Why Does This Work?
+
+Earlier we learned that Lambda Functions cannot contain normal
+
+```python
+if
+```
+
+statements.
+
+However,
+
+they **can contain conditional expressions**.
+
+Syntax
+
+```python
+value_if_true if condition else value_if_false
+```
+
+This entire statement is considered a **single expression**.
+
+Therefore,
+
+it is valid inside Lambda Functions.
+
+---
+
+# Exercise 5 – Find Maximum of Two Numbers
+
+The final classroom exercise was finding the larger of two numbers.
+
+---
+
+## Normal Function
+
+```python
+def maximum(a, b):
+
+    if a > b:
+        return a
+    else:
+        return b
+```
+
+---
+
+## Lambda Function
+
+```python
+max_num = lambda a, b: a if a > b else b
+
+print(max_num(3, 4))
+print(max_num(9, 5))
+```
+
+### Output
+
+```text
+4
+9
+```
+
+---
+
+## Dry Run
+
+### Input
+
+```python
+max_num(3,4)
+```
+
+Expression
+
+```python
+3 if 3 > 4 else 4
+```
+
+Condition
+
+```python
+3 > 4
+```
+
+Result
+
+```text
+False
+```
+
+Therefore,
+
+```text
+4
+```
+
+is returned.
+
+---
+
+### Input
+
+```python
+max_num(9,5)
+```
+
+Expression
+
+```python
+9 if 9 > 5 else 5
+```
+
+Condition
+
+```python
+9 > 5
+```
+
+Result
+
+```text
+True
+```
+
+Therefore,
+
+```text
+9
+```
+
+is returned.
+
+---
+
+# Summary of Classroom Exercises
+
+| Problem | Lambda Function |
+|----------|-----------------|
+| First Character | `lambda s: s[0]` |
+| Last Character | `lambda s: s[-1]` |
+| Even Check | `lambda n: n % 2 == 0` |
+| Even/Odd | `lambda n: "Even" if n % 2 == 0 else "Odd"` |
+| Maximum | `lambda a, b: a if a > b else b` |
+
+---
+
+# Common Mistakes
+
+## Mistake 1
+
+```python
+lambda s:s(0)
+```
+
+Incorrect.
+
+Correct
+
+```python
+lambda s:s[0]
+```
+
+because strings use indexing.
+
+---
+
+## Mistake 2
+
+Using normal `if` statements.
+
+Incorrect
+
+```python
+lambda n:
+
+if n%2==0:
+
+return "Even"
+```
+
+Correct
+
+```python
+lambda n:"Even" if n%2==0 else "Odd"
+```
+
+---
+
+## Mistake 3
+
+Forgetting negative indexing.
+
+```python
+string[-1]
+```
+
+returns the last character.
+
+---
+
+# Interview Questions
+
+### Q1. How do you return the first character using Lambda?
+
+```python
+lambda s:s[0]
+```
+
+---
+
+### Q2. How do you return the last character?
+
+```python
+lambda s:s[-1]
+```
+
+---
+
+### Q3. How do you check whether a number is even?
+
+```python
+lambda n:n%2==0
+```
+
+---
+
+### Q4. Can Single-Line If-Else be used inside Lambda Functions?
 
 **Yes.**
 
-Python provides a special keyword called
+---
+
+### Q5. How do you return the maximum of two numbers?
 
 ```python
-global
+lambda a,b:a if a>b else b
 ```
 
 ---
 
-# The `global` Keyword
+# Key Takeaways
 
-The `global` keyword tells Python
+- Lambda Functions can work with strings.
+- Lambda Functions can return Boolean values.
+- Single-Line If-Else is extremely useful inside Lambda Functions.
+- Negative indexing can easily return the last character.
+- Small utility functions are best written using Lambda Functions.
 
-> "Do not create a new local variable. Use the existing global variable instead."
+---
+
+# Next Topic
+
+In the next section, we'll learn the **most important application of Lambda Functions**:
+
+# `map()` Function
+
+This is where Lambda Functions become truly powerful and useful in real-world Python programming.
+
+> **End of Part 4**
+=============================================================================================================================================================
+# The `map()` Function
+
+So far, we have learned how to create **Lambda Functions**.
+
+Now comes the most important part of this lecture.
+
+The instructor explained that **the real power of Lambda Functions is realized when they are used with higher-order functions such as `map()` and `filter()`.**
+
+In fact, one of the primary reasons Lambda Functions exist is to make working with these higher-order functions simple and elegant.
+
+---
+
+# Why Do We Need `map()`?
+
+Suppose we have a list of numbers.
+
+```python
+numbers = [2, 3, 6, 8, 4]
+```
+
+Now suppose we want to calculate the **square of every element**.
+
+One approach is to use a loop.
+
+Another approach is to use the built-in **`map()`** function.
+
+The second approach is shorter, cleaner, and more "Pythonic".
+
+---
+
+# What is the `map()` Function?
+
+`map()` is a built-in Python function.
+
+It applies a given function to **every element** of an iterable (such as a list, tuple, or string) and returns a new **map object**.
+
+---
+
+## Definition
+
+> The `map()` function takes two arguments:
+>
+> 1. A function
+> 2. An iterable
+>
+> It applies the function to every element of the iterable and returns the results.
 
 ---
 
 # Syntax
 
 ```python
-global variable_name
+map(function, iterable)
 ```
+
+General Syntax
+
+```python
+map(function_name, collection)
+```
+
+where
+
+- **function** → Function to apply
+- **iterable** → List, Tuple, String, etc.
+
+---
+
+# Parameters of `map()`
+
+## First Parameter
+
+The first parameter is a **function**.
 
 Example
 
 ```python
-global count
+square
 ```
 
----
+Notice
 
-# Example 2 – Using `global`
-
-```python
-s = "I love Python"
-
-def f():
-
-    global s
-
-    s = "I love C"
-
-    print(s)
-
-f()
-
-print(s)
-```
-
-### Output
-
-```text
-I love C
-I love C
-```
-
----
-
-# Dry Run
-
-Initially,
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-Now the function starts.
-
-Python encounters
+We write
 
 ```python
-global s
+square
 ```
 
-This tells Python
-
-> **Do not create a local variable named `s`.**
-
-Instead,
-
-use the existing global variable.
-
-Now the assignment
-
-```python
-s = "I love C"
-```
-
-changes the global variable itself.
-
-Memory becomes
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love C"
-```
-
-The function prints
-
-```text
-I love C
-```
-
-After the function ends,
-
-the global variable still contains
-
-```text
-I love C
-```
-
-Therefore,
-
-the second `print(s)` also prints
-
-```text
-I love C
-```
-
----
-
-# Memory Comparison
-
-## Without `global`
-
-```text
-Global Memory
-
-↓
-
-s = "Python"
-
-
-Function
-
-↓
-
-Creates Local s
-
-↓
-
-"C"
-
-↓
-
-Global Variable Unchanged
-```
-
----
-
-## With `global`
-
-```text
-Global Memory
-
-↓
-
-s = "Python"
-
-↓
-
-global s
-
-↓
-
-Modify Same Variable
-
-↓
-
-"C"
-```
-
-Only one variable exists.
-
----
-
-# Example 3
-
-```python
-count = 10
-
-def increment():
-
-    global count
-
-    count = count + 1
-
-increment()
-
-print(count)
-```
-
-### Output
-
-```text
-11
-```
-
-Since the global variable was modified,
-
-the new value becomes visible everywhere.
-
----
-
-# Rules for Using `global`
-
-## Rule 1
-
-Use `global` only when you want to modify a global variable.
-
----
-
-## Rule 2
-
-Reading a global variable **does not require** the `global` keyword.
-
-Example
-
-```python
-x = 100
-
-def show():
-    print(x)
-```
-
-This works perfectly.
-
----
-
-## Rule 3
-
-Declare `global` before using the variable.
-
-Correct
-
-```python
-def show():
-
-    global x
-
-    x = 50
-```
-
----
-
-## Rule 4
-
-Avoid excessive use of global variables.
-
-Professional Python programs prefer returning values instead of modifying globals because excessive global variables make programs difficult to debug and maintain.
-
----
-
-# Global Variable vs Local Variable
-
-Without `global`
-
-```python
-x = 10
-
-def show():
-
-    x = 20
-
-show()
-
-print(x)
-```
-
-Output
-
-```text
-10
-```
-
----
-
-With `global`
-
-```python
-x = 10
-
-def show():
-
-    global x
-
-    x = 20
-
-show()
-
-print(x)
-```
-
-Output
-
-```text
-20
-```
-
----
-
-# Common Mistakes
-
-## Mistake 1
-
-Thinking
-
-```python
-x = 20
-```
-
-inside a function modifies the global variable.
-
-It doesn't.
-
-It creates a local variable.
-
----
-
-## Mistake 2
-
-Using `global` unnecessarily.
-
-```python
-x = 10
-
-def show():
-
-    global x
-
-    print(x)
-```
-
-This works,
-
-but `global` isn't required because we are only reading the variable.
-
----
-
-## Interview Questions
-
-### Q1. What is Variable Shadowing?
-
-Variable Shadowing occurs when a local variable has the same name as a global variable, causing the local variable to hide the global one inside the function.
-
----
-
-### Q2. Does assignment inside a function modify a global variable?
-
-**No.**
-
-It creates a new local variable unless `global` is used.
-
----
-
-### Q3. When should we use the `global` keyword?
-
-Whenever we want to modify a global variable from inside a function.
-
----
-
-### Q4. Can a global variable be read without using `global`?
-
-**Yes.**
-
-The `global` keyword is needed only for modification.
-
----
-
-# Key Takeaways
-
-- Assignment inside a function creates a local variable by default.
-- Local variables hide global variables having the same name.
-- This behavior is called **Variable Shadowing**.
-- The `global` keyword tells Python to use the global variable instead of creating a local one.
-- Reading a global variable never requires the `global` keyword.
-- Modifying a global variable requires the `global` keyword.
-
----
-
-> **End of Part 2**
-==============================================================================================================================================================
-# UnboundLocalError – Python's Unique Behaviour
-
-In the previous section, we learned that whenever Python encounters an assignment statement (`=`) inside a function, it **creates a local variable** by default.
-
-This rule leads to one of the most common errors beginners face while learning Python:
-
-> **UnboundLocalError**
-
-This error often confuses beginners because the variable **already exists globally**, yet Python still reports an error.
-
-To understand why this happens, we first need to understand **how Python compiles and executes functions**.
-
----
-
-# How Python Executes a Function
-
-Many beginners think Python executes a function **line by line**, deciding whether a variable is local or global as it moves through the code.
-
-**This is NOT how Python works.**
-
-Before executing a function, Python first scans the **entire function body**.
-
-During this scan, Python identifies all the variables that are assigned values.
-
-If Python finds even one assignment to a variable inside a function,
-
-```python
-x = something
-```
-
-then Python marks that variable as **local for the entire function**.
-
-This decision is made **before** the first line of the function executes.
-
----
-
-# What is UnboundLocalError?
-
-> **Definition**
-
-`UnboundLocalError` occurs when Python treats a variable as **local**, but the program tries to use that local variable **before assigning any value to it**.
-
-Unlike `NameError`, the variable **does exist** in the local scope.
-
-The problem is that it has **not yet been initialized**.
-
----
-
-# Difference Between NameError and UnboundLocalError
-
-| NameError | UnboundLocalError |
-|-----------|-------------------|
-| Variable cannot be found. | Variable exists locally but has no value yet. |
-| Python cannot locate the variable. | Python located the local variable but it is uninitialized. |
-| Usually occurs when a variable never existed. | Usually occurs because of assignment inside a function. |
-
----
-
-# Example 1 – Pre-Assignment Access Trap
-
-This was one of the most important examples demonstrated in class.
-
-```python
-x = 10
-
-def f():
-
-    x = x + 1
-
-    print(x)
-
-f()
-```
-
-### Output
-
-```text
-UnboundLocalError:
-cannot access local variable 'x'
-where it is not associated with a value
-```
-
----
-
-# What Most Beginners Think
-
-Many students expect Python to execute the code like this:
-
-```text
-Global x
-
-↓
-
-10
-
-↓
-
-10 + 1
-
-↓
-
-11
-
-↓
-
-Print 11
-```
-
-Therefore, they expect the output to be
-
-```text
-11
-```
-
-However,
-
-this is **not** what Python does.
-
----
-
-# What Python Actually Does
-
-Before execution,
-
-Python scans the entire function.
-
-It finds
-
-```python
-x = x + 1
-```
-
-Since there is an assignment,
-
-Python immediately decides
-
-```text
-x
-
-↓
-
-Local Variable
-```
-
-Now execution begins.
-
-Python evaluates
-
-```python
-x + 1
-```
-
-But remember,
-
-Python is searching for the **local variable**.
-
-The local variable has not yet received any value.
-
-Therefore,
-
-Python raises
-
-```text
-UnboundLocalError
-```
-
----
-
-# Dry Run
-
-Initially
-
-```text
-Global Memory
-
-↓
-
-x
-
-↓
-
-10
-```
-
-Python scans the function.
-
-```
-Assignment Found
-
-↓
-
-x becomes Local
-```
-
-Execution begins.
-
-```
-x = x + 1
-
-↓
-
-Need Local x
-
-↓
-
-Local x has no value
-
-↓
-
-UnboundLocalError
-```
-
-Notice something very important.
-
-Python never even looks at the global variable.
-
----
-
-# Memory Diagram
-
-Before Function Call
-
-```text
-Global Memory
-
-↓
-
-x
-
-↓
-
-10
-```
-
-Function Starts
-
-```text
-Compiler
-
-↓
-
-Detects Assignment
-
-↓
-
-Creates Local x
-```
-
-Execution
-
-```text
-Local x
-
-↓
-
-No Value
-
-↓
-
-Trying to Evaluate
-
-↓
-
-x + 1
-
-↓
-
-Error
-```
-
----
-
-# Why Doesn't Python Use the Global Variable?
-
-Because Python already decided
-
-```text
-x
-
-↓
-
-Local Variable
-```
-
-during compilation.
-
-Once that decision is made,
-
-the global variable becomes invisible inside that function.
-
----
-
-# Correct Solution
-
-If our intention is to modify the global variable,
-
-we must explicitly declare it.
-
-```python
-x = 10
-
-def f():
-
-    global x
-
-    x = x + 1
-
-    print(x)
-
-f()
-
-print(x)
-```
-
-### Output
-
-```text
-11
-
-11
-```
-
----
-
-# Dry Run
-
-Initially
-
-```text
-Global Memory
-
-↓
-
-x = 10
-```
-
-Function starts.
-
-Python sees
-
-```python
-global x
-```
-
-Therefore,
-
-Python **does not create a local variable**.
-
-Instead,
-
-the existing global variable is used.
-
-Now
-
-```python
-x = x + 1
-```
-
-becomes
-
-```text
-10 + 1
-
-↓
-
-11
-
-↓
-
-Stored Back into Global Memory
-```
-
-Both print statements therefore produce
-
-```text
-11
-```
-
----
-
-# Example 2 – Post-Usage Assignment Trap
-
-Now consider another interesting example discussed in class.
-
-```python
-s = "I love Python"
-
-def f():
-
-    print(s)
-
-    s = "I love C"
-
-f()
-```
-
-### Output
-
-```text
-UnboundLocalError
-```
-
----
-
-# Why Does This Error Occur?
-
-Many beginners say
-
-> "Sir, `print(s)` comes before the assignment."
-
-So they expect
-
-```text
-I love Python
-```
-
-Unfortunately,
-
-Python has already scanned the function.
-
-During scanning,
-
-it noticed
-
-```python
-s = "I love C"
-```
-
-Therefore,
-
-Python marked
-
-```text
-s
-
-↓
-
-Local Variable
-```
-
-for the **entire function**.
-
-Now execution begins.
-
-The first statement is
-
-```python
-print(s)
-```
-
-Python searches for the local variable.
-
-It exists,
-
-but has not yet been assigned any value.
-
-Result
-
-```text
-UnboundLocalError
-```
-
----
-
-# Execution Flow
-
-```text
-Function Definition
-
-↓
-
-Python Scans Function
-
-↓
-
-Assignment Found
-
-↓
-
-s marked as Local
-
-↓
-
-Execution Starts
-
-↓
-
-print(s)
-
-↓
-
-Search Local Variable
-
-↓
-
-No Value Assigned
-
-↓
-
-UnboundLocalError
-```
-
----
-
-# Memory Representation
-
-Initially
-
-```text
-Global Memory
-
-↓
-
-s
-
-↓
-
-"I love Python"
-```
-
-Compiler Scan
-
-```text
-Assignment Found
-
-↓
-
-Create Local s
-```
-
-Execution
-
-```text
-print(s)
-
-↓
-
-Need Local Variable
-
-↓
-
-No Value
-
-↓
-
-Error
-```
-
-Again,
-
-the global variable is completely ignored.
-
----
-
-# Correct Version
-
-```python
-s = "I love Python"
-
-def f():
-
-    global s
-
-    print(s)
-
-    s = "I love C"
-
-f()
-
-print(s)
-```
-
-### Output
-
-```text
-I love Python
-
-I love C
-```
-
-Now both statements operate on the same global variable.
-
----
-
-# Common Mistakes
-
-## Mistake 1
-
-```python
-count = 5
-
-def increment():
-
-    count = count + 1
-```
-
-Produces
-
-```text
-UnboundLocalError
-```
-
-because `count` is treated as a local variable.
-
----
-
-## Mistake 2
-
-Thinking Python decides scope while executing each line.
-
-It doesn't.
-
-Python decides the scope **before execution**.
-
----
-
-## Mistake 3
-
-Using a variable before assigning it inside a function.
-
-Always remember:
-
-> Assignment anywhere inside a function makes that variable local (unless `global` is used).
-
----
-
-# Interview Questions
-
-### Q1. What is UnboundLocalError?
-
-It occurs when Python treats a variable as local but the variable is accessed before receiving any value.
-
----
-
-### Q2. Why doesn't Python use the global variable?
-
-Because assignment inside the function makes the variable local during compilation.
-
----
-
-### Q3. Difference between NameError and UnboundLocalError?
-
-| NameError | UnboundLocalError |
-|-----------|-------------------|
-| Variable not found | Local variable exists but has no value |
-| Scope lookup fails | Local variable accessed before assignment |
-
----
-
-### Q4. How can we fix UnboundLocalError?
-
-By using the `global` keyword when we intend to modify a global variable.
-
----
-
-# Key Takeaways
-
-- Python scans the entire function before execution.
-- Assignment inside a function automatically creates a local variable.
-- Accessing that local variable before assignment raises `UnboundLocalError`.
-- The global variable is ignored once Python classifies the variable as local.
-- The `global` keyword instructs Python to use the global variable instead of creating a local one.
-
----
-
-> **End of Part 3**
-=============================================================================================================================================================
-# Scope of Conditional Statements and Loops
-
-After understanding **Global Variables**, **Local Variables**, the **`global` keyword**, and **UnboundLocalError**, the instructor discussed another concept that confuses beginners coming from C, C++, Java, or JavaScript.
-
-Many students assume that every pair of curly braces (`{}`) or every block of code creates a new scope.
-
-However,
-
-> **Python does not have block-level scope.**
-
-This is one of the most frequently asked Python interview questions.
-
----
-
-# What is Block-Level Scope?
-
-In many programming languages,
-
-blocks like
-
-- `if`
-- `else`
-- `for`
-- `while`
-
-create a completely new scope.
-
-Variables declared inside those blocks disappear after the block finishes.
-
-For example, in C++:
-
-```cpp
-if(true)
-{
-    int x = 10;
-}
-
-cout << x;
-```
-
-Output
-
-```text
-Compilation Error
-```
-
-because
-
-```
-x
-
-↓
-
-Destroyed
-```
-
-after leaving the block.
-
----
-
-# Does Python Have Block-Level Scope?
-
-**No.**
-
-Python **does not** create a new scope for:
-
-- `if`
-- `elif`
-- `else`
-- `for`
-- `while`
-
-Variables declared inside these blocks remain accessible after the block finishes (provided the block executed).
-
-Only these create a new scope:
-
-- Functions
-- Classes
-- Modules
-
----
-
-# Example 1 – Variable Inside an `if` Block
-
-```python
-if True:
-
-    x = 100
-
-print(x)
-```
-
-### Output
-
-```text
-100
-```
-
----
-
-# Dry Run
-
-Execution starts.
-
-Python checks
-
-```python
-if True
-```
-
-The condition is true.
-
-Therefore,
-
-```python
-x = 100
-```
-
-is executed.
-
-Unlike C++,
-
-Python does **not** destroy `x` after leaving the `if` block.
-
-Hence,
-
-```python
-print(x)
-```
-
-prints
-
-```text
-100
-```
-
----
-
-# Memory Representation
-
-Initially
-
-```text
-Global Memory
-
-↓
-
-(No x)
-```
-
-Inside `if`
-
-```text
-Global Memory
-
-↓
-
-x
-
-↓
-
-100
-```
-
-After leaving the `if` block
-
-```text
-Global Memory
-
-↓
-
-x
-
-↓
-
-100
-```
-
-Notice that the variable is still available.
-
----
-
-# Example 2 – Example from Class
-
-```python
-a = 0
-
-if True:
-
-    b = 1
-
-print(a)
-
-print(b)
-```
-
-### Output
-
-```text
-0
-1
-```
-
----
-
-# Explanation
-
-Initially
-
-```text
-Global Memory
-
-↓
-
-a
-
-↓
-
-0
-```
-
-The condition
-
-```python
-if True
-```
-
-is satisfied.
-
-Python executes
-
-```python
-b = 1
-```
-
-Since `if` does not create a new scope,
-
-`b` also becomes a global variable.
-
-Memory becomes
-
-```text
-Global Memory
-
-↓
-
-a
-
-↓
-
-0
-
-↓
-
-b
-
-↓
-
-1
-```
-
-Both variables are available after the `if` block.
-
----
-
-# Scope Inside Functions
-
-Now consider the classroom example.
-
-```python
-a = 0
-
-if True:
-
-    b = 1
-
-def f(c):
-
-    d = 3
-
-    print(c)
-
-    print(d)
-
-f(7)
-
-print(a)
-
-print(b)
-
-print(c)
-```
-
----
-
-## Output
-
-```text
-7
-3
-0
-1
-NameError
-```
-
----
-
-# Dry Run
-
-Initially,
-
-Python creates
-
-```text
-Global Variables
-
-↓
-
-a = 0
-```
-
-The `if` block executes.
-
-```python
-b = 1
-```
-
-Since there is no block scope,
-
-both variables remain global.
-
-Now,
-
-```python
-f(7)
-```
-
-is called.
-
-The parameter
-
-```python
-c
-```
-
-is created.
-
-Inside the function,
-
-another local variable
-
-```python
-d
-```
-
-is created.
-
-Memory becomes
-
-```text
-Global Memory
-
-↓
-
-a = 0
-
-↓
-
-b = 1
-
-
-Function Memory
-
-↓
-
-c = 7
-
-↓
-
-d = 3
-```
-
-Inside the function,
-
-```python
-print(c)
-```
-
-prints
-
-```text
-7
-```
-
-Then,
-
-```python
-print(d)
-```
-
-prints
-
-```text
-3
-```
-
-The function finishes.
-
-Immediately,
-
-the local variables
-
-```text
-c
-
-↓
-
-Destroyed
-
-d
-
-↓
-
-Destroyed
-```
-
-Execution continues.
-
-```python
-print(a)
-```
-
-prints
-
-```text
-0
-```
-
-```python
-print(b)
-```
-
-prints
-
-```text
-1
-```
-
-Finally,
-
-```python
-print(c)
-```
-
-Python searches
-
-Local Scope
-
-↓
-
-Destroyed
-
-Global Scope
-
-↓
-
-No Variable Named `c`
-
-Result
-
-```text
-NameError
-```
-
----
-
-# Memory Diagram
-
-Before Function Call
-
-```text
-Global Memory
-
-↓
-
-a = 0
-
-↓
-
-b = 1
-```
-
-During Function Execution
-
-```text
-Global Memory
-
-↓
-
-a = 0
-
-↓
-
-b = 1
-
-
-Local Memory
-
-↓
-
-c = 7
-
-↓
-
-d = 3
-```
-
-After Function Ends
-
-```text
-Local Memory Destroyed
-
-
-Global Memory
-
-↓
-
-a = 0
-
-↓
-
-b = 1
-```
-
----
-
-# Function Parameters are Local Variables
-
-One important point emphasized in class was:
-
-> **Function parameters are also local variables.**
-
-Example
-
-```python
-def square(number):
-
-    print(number)
-
-square(5)
-
-print(number)
-```
-
-### Output
-
-```text
-5
-
-NameError
-```
-
----
-
-# Why?
-
-The parameter
-
-```python
-number
-```
-
-exists only while
+NOT
 
 ```python
 square()
 ```
 
-is executing.
-
-After the function returns,
-
-it is destroyed.
-
 ---
 
-# Scope Summary
+### Why?
 
-| Structure | Creates New Scope? |
-|------------|--------------------|
-| Function | ✅ Yes |
-| Class | ✅ Yes |
-| Module | ✅ Yes |
-| if | ❌ No |
-| elif | ❌ No |
-| else | ❌ No |
-| for | ❌ No |
-| while | ❌ No |
-
----
-
-# Common Mistakes
-
-## Mistake 1
-
-Thinking
+Because
 
 ```python
-if True:
-
-    x = 10
+square
 ```
 
-creates a local variable.
+represents the **function object (reference)**.
 
-It doesn't.
+Whereas
+
+```python
+square()
+```
+
+means
+
+> Execute the function immediately.
+
+But `map()` itself is responsible for calling the function.
+
+Therefore,
+
+Correct
+
+```python
+map(square, numbers)
+```
+
+Incorrect
+
+```python
+map(square(), numbers)
+```
 
 ---
 
-## Mistake 2
+## Second Parameter
 
-Trying to access function parameters outside the function.
+The second parameter must be an **iterable**.
+
+Examples
 
 ```python
-def show(a):
-
-    print(a)
-
-show(10)
-
-print(a)
+list
 ```
 
-Output
+```python
+tuple
+```
+
+```python
+string
+```
+
+```python
+range
+```
+
+---
+
+# How Does `map()` Work?
+
+Suppose we have
+
+```python
+numbers = [2,3,6,8,4]
+```
+
+and
+
+```python
+square(x)
+```
+
+The execution becomes
 
 ```text
-NameError
+2
+
+↓
+
+square(2)
+
+↓
+
+4
+
+------------------
+
+3
+
+↓
+
+square(3)
+
+↓
+
+9
+
+------------------
+
+6
+
+↓
+
+square(6)
+
+↓
+
+36
+
+------------------
+
+8
+
+↓
+
+square(8)
+
+↓
+
+64
+
+------------------
+
+4
+
+↓
+
+square(4)
+
+↓
+
+16
 ```
+
+Finally,
+
+Python combines all returned values into a **map object**.
 
 ---
 
-## Mistake 3
+# Example 1 – Traditional Approach (Using `for` Loop)
 
-Thinking loop variables disappear.
+Before learning `map()`, let's solve the problem using a loop.
 
 ```python
-for i in range(5):
+def square(n):
+    return n * n
 
-    pass
+numbers = [2, 3, 6, 8, 4]
 
-print(i)
+for x in numbers:
+    print(square(x))
 ```
 
-Output
+### Output
 
 ```text
 4
-```
-
-The loop variable still exists because Python has no block-level scope.
-
----
-
-# Interview Questions
-
-### Q1. Does Python have block-level scope?
-
-**No.**
-
----
-
-### Q2. Which structures create a new scope?
-
-- Functions
-- Classes
-- Modules
-
----
-
-### Q3. Are function parameters local variables?
-
-**Yes.**
-
----
-
-### Q4. Can variables declared inside an `if` block be accessed outside?
-
-**Yes.**
-
----
-
-### Q5. Why does `print(c)` produce `NameError` in the classroom example?
-
-Because `c` is a function parameter (local variable), and it is destroyed after the function finishes.
-
----
-
-# Key Takeaways
-
-- Python does **not** have block-level scope.
-- Variables declared inside `if`, `for`, and `while` remain accessible outside those blocks.
-- Functions create a completely separate local scope.
-- Function parameters are local variables.
-- Local variables are destroyed immediately after the function returns.
-- Attempting to access a local variable after function execution results in `NameError`.
-
----
-
-# Next Topic
-
-Now that we understand **Variable Scope**, the next topic is **Argument Passing**.
-
-We will answer questions such as:
-
-- Does Python use **Pass by Value**?
-- Does Python use **Pass by Reference**?
-- What is **Pass by Object Reference**?
-- Why do integers behave differently from lists?
-
-These concepts form the foundation of how Python functions work internally.
-
----
-
-> **End of Part 4**
-=============================================================================================================================================================
-# Argument Passing in Python
-
-After understanding **Variable Scope**, the instructor introduced another fundamental concept:
-
-> **How are arguments actually passed to functions in Python?**
-
-Many beginners think Python follows either:
-
-- **Pass by Value**
-- **Pass by Reference**
-
-However, Python follows **neither** of these exactly.
-
-Instead, Python uses a unique mechanism called:
-
-> **Pass by Object Reference**
-
-Understanding this concept is essential because it explains why integers behave differently from lists when passed to functions.
-
----
-
-# Ways of Passing Arguments
-
-Before understanding Python's mechanism, let's briefly look at the two traditional mechanisms used by other programming languages.
-
-```
-Call by Value
-        ↓
-Call by Reference
-        ↓
-Pass by Object Reference (Python)
+9
+36
+64
+16
 ```
 
 ---
 
-# Call by Value
+## Dry Run
 
-In **Call by Value**, a **copy** of the original variable is passed to the function.
-
-The function works only on this copy.
-
-Therefore,
-
-changes made inside the function do **not** affect the original variable.
-
----
-
-## Concept Diagram
-
-```
-Original Variable
-
-↓
-
-10
-
-↓
-
-Copy Created
-
-↓
-
-Function Parameter
-
-↓
-
-10
-```
-
-The function modifies only the copy.
-
-The original variable remains unchanged.
-
----
-
-# Example (Conceptual)
-
-Suppose a language follows Call by Value.
-
-```
-Original
-
-↓
-
-10
-
-↓
-
-Function receives
-
-↓
-
-10
-
-↓
-
-Function changes
-
-↓
-
-20
-
-↓
-
-Original
-
-↓
-
-Still 10
-```
-
-This is how C works.
-
----
-
-# Call by Reference
-
-In **Call by Reference**, instead of creating a copy,
-
-the memory address of the variable is passed to the function.
-
-Both variables point to exactly the same memory location.
-
----
-
-## Concept Diagram
-
-```
-Main Variable
-
-↓
-
-Address
-
-↓
-
-Function Parameter
-
-↓
-
-Same Address
-```
-
-If the function changes the variable,
-
-the original variable also changes.
-
-This mechanism is commonly used in C++ (using reference variables).
-
----
-
-# Does Python Use Call by Value?
-
-**No.**
-
----
-
-# Does Python Use Call by Reference?
-
-**No.**
-
----
-
-# Python's Mechanism
-
-Python uses
-
-> **Pass by Object Reference**
-
-This mechanism is also known as
-
-- Call by Sharing
-- Pass Object Reference
-- Object Reference Passing
-
-All these terms refer to the same concept.
-
----
-
-# Why is it Called "Pass by Object Reference"?
-
-Everything in Python is an **object**.
-
-Variables do **not** directly store values.
-
-Instead,
-
-variables store **references to objects**.
-
-For example,
+Initially,
 
 ```python
-a = 10
+numbers = [2,3,6,8,4]
 ```
 
-Most beginners imagine memory like this:
+Loop starts.
+
+Iteration 1
+
+```text
+x = 2
+```
 
 ```
-a
+square(2)
 
 ↓
 
-10
+4
 ```
 
-But Python actually stores
+Iteration 2
 
 ```
-Variable
+square(3)
 
 ↓
 
-Reference
-
-↓
-
-Integer Object
-
-↓
-
-10
+9
 ```
 
-The variable doesn't contain the integer itself.
+Iteration 3
 
-It only stores a reference to the integer object.
+```
+square(6)
+
+↓
+
+36
+```
+
+Iteration 4
+
+```
+square(8)
+
+↓
+
+64
+```
+
+Iteration 5
+
+```
+square(4)
+
+↓
+
+16
+```
 
 ---
 
-# Object Reference Example
+# Problem with This Approach
+
+Although it works,
+
+we still have
+
+- a function
+- a loop
+- repeated function calls
+
+Python provides a much shorter solution.
+
+---
+
+# Example 2 – Using `map()` with a Normal Function
 
 ```python
-a = 10
-b = a
-```
+def square(n):
+    return n * n
 
-Memory Representation
+numbers = [2, 3, 6, 8, 4]
 
-```
-Integer Object
+result = map(square, numbers)
 
-↓
-
-10
-
-↑
-│
-a
-│
-b
-```
-
-Both variables refer to the same integer object.
-
-Python does **not** create another integer object.
-
----
-
-# What Happens After Reassignment?
-
-Now consider
-
-```python
-b = 20
-```
-
-Integers are immutable.
-
-Therefore,
-
-Python creates a brand new integer object.
-
-Memory becomes
-
-```
-Integer Object
-
-↓
-
-10
-
-↑
-a
-
-
-Integer Object
-
-↓
-
-20
-
-↑
-b
-```
-
-The original object
-
-```
-10
-```
-
-never changes.
-
-Only
-
-```
-b
-```
-
-starts referring to another object.
-
----
-
-# Mutable vs Immutable Objects
-
-Python's argument passing depends entirely on the type of object being passed.
-
-Objects are classified into two categories.
-
----
-
-## Immutable Objects
-
-These objects **cannot be modified** after creation.
-
-Examples
-
-- `int`
-- `float`
-- `bool`
-- `str`
-- `tuple`
-
----
-
-## Mutable Objects
-
-These objects **can be modified** after creation.
-
-Examples
-
-- `list`
-- `dict`
-- `set`
-- `bytearray`
-
----
-
-# Why is This Important?
-
-The behavior of a function depends on whether the object is mutable or immutable.
-
-For **immutable objects**,
-
-reassignment creates a **new object**.
-
-For **mutable objects**,
-
-methods such as
-
-```python
-append()
-```
-
-modify the existing object.
-
-This is why integers and lists behave differently.
-
----
-
-# Argument Passing with Immutable Objects
-
-The instructor first demonstrated argument passing using integers.
-
-Consider the following classroom example.
-
-```python
-def show(a):
-
-    print("Inside before change:", a)
-
-    a = 20
-
-    print("Inside after change:", a)
-
-a = 10
-
-print("Before calling:", a)
-
-show(a)
-
-print("After calling:", a)
+print(list(result))
 ```
 
 ### Output
 
 ```text
-Before calling: 10
+[4, 9, 36, 64, 16]
+```
 
-Inside before change: 10
+---
 
-Inside after change: 20
+# Why `list()`?
 
-After calling: 10
+This is an important point discussed in class.
+
+The `map()` function **does not return a list**.
+
+It returns a **map object**.
+
+If we print it directly,
+
+```python
+print(result)
+```
+
+Output
+
+```text
+<map object at 0x...>
+```
+
+To actually see the values,
+
+we convert it into a list.
+
+```python
+list(result)
+```
+
+Now Python displays
+
+```text
+[4,9,36,64,16]
+```
+
+---
+
+# What Happens Internally?
+
+Execution
+
+```python
+map(square, numbers)
+```
+
+becomes
+
+```text
+square(2)
+
+↓
+
+4
+
+square(3)
+
+↓
+
+9
+
+square(6)
+
+↓
+
+36
+
+square(8)
+
+↓
+
+64
+
+square(4)
+
+↓
+
+16
+```
+
+Then Python creates
+
+```text
+Map Object
+
+↓
+
+Convert to List
+
+↓
+
+[4,9,36,64,16]
+```
+
+---
+
+# Important Note
+
+Notice carefully.
+
+We passed
+
+```python
+square
+```
+
+NOT
+
+```python
+square()
+```
+
+because `map()` needs the function itself,
+
+not the result of calling it.
+
+---
+
+# Example 3 – Using `map()` with a Lambda Function
+
+Now comes the most important application of Lambda Functions.
+
+Instead of writing
+
+```python
+def square(n):
+    return n*n
+```
+
+we can directly write
+
+```python
+numbers = [2, 3, 6, 8, 4]
+
+result = list(map(lambda x: x * x, numbers))
+
+print(result)
+```
+
+### Output
+
+```text
+[4, 9, 36, 64, 16]
 ```
 
 ---
@@ -3103,1356 +2457,670 @@ After calling: 10
 
 Initially,
 
-```
-Global Memory
-
-↓
-
-a
-
-↓
-
-10
+```python
+numbers = [2,3,6,8,4]
 ```
 
-When
+Lambda Function
 
 ```python
-show(a)
+lambda x:x*x
 ```
 
-is executed,
-
-Python passes the **reference** to the integer object.
-
-Memory now looks like
-
-```
-Global Variable
-
-↓
-
-10
-
-↑
-│
-a
-│
-Function Parameter
-```
-
-Both references point to the same integer object.
-
----
-
-# What Happens During Assignment?
-
-Python executes
+is passed to
 
 ```python
-a = 20
+map()
 ```
 
-Integers are immutable.
-
-Therefore,
-
-Python **cannot modify** the integer object
-
-```
-10
-```
-
-Instead,
-
-Python creates a **new integer object**.
-
-Memory becomes
-
-```
-Global Variable
-
-↓
-
-10
-
-
-Function Parameter
-
-↓
-
-20
-```
-
-The function parameter now points to a different object.
-
-The original variable still points to
-
-```
-10
-```
-
-Therefore,
-
-after the function returns,
-
-the original variable remains unchanged.
-
----
-
-# Memory Diagram
-
-Before Function Call
-
-```
-Global a
-
-↓
-
-10
-```
-
-During Function Call
-
-```
-Global a
-
-↓
-
-10
-
-↑
-
-Function a
-```
-
-After Assignment
-
-```
-Global a
-
-↓
-
-10
-
-
-Function a
-
-↓
-
-20
-```
-
-The two variables now point to different objects.
-
----
-
-# Key Observation
-
-The statement
-
-```python
-a = 20
-```
-
-does **not** modify the integer
-
-```
-10
-```
-
-Instead,
-
-it creates a brand new integer object.
-
----
-
-# Interview Point
-
-Whenever an immutable object is reassigned,
-
-Python creates a new object rather than modifying the existing one.
-
----
-
-# Common Mistake
-
-Many beginners believe
-
-```python
-a = 20
-```
-
-changes the value
-
-```
-10
-```
-
-This is incorrect.
-
-The integer object
-
-```
-10
-```
-
-never changes.
-
-Python simply changes the reference.
-
----
-
-# Key Takeaways
-
-- Python passes **object references**, not copies.
-- Variables store references to objects.
-- Integers are immutable.
-- Reassigning an immutable object creates a new object.
-- The original object remains unchanged.
-
----
-
-# Next Topic
-
-In the next section, we will study **Mutable Objects**.
-
-We'll understand why methods like
-
-- `append()`
-- `extend()`
-- `insert()`
-
-modify the original list,
-
-while assignment
-
-```python
-=
-```
-
-creates a completely new list.
-
----
-
-> **End of Part 5**
-=============================================================================================================================================================
-# Argument Passing with Mutable Objects
-
-In the previous section, we studied how **immutable objects** (such as integers, strings, tuples, etc.) behave when passed to a function.
-
-We observed that assigning a new value to an immutable object inside a function **does not affect** the original object.
-
-Now let's study what happens when **mutable objects** are passed to a function.
-
-This is one of the most important topics in Python because it explains why **lists, dictionaries, and sets behave differently** from integers.
-
----
-
-# What are Mutable Objects?
-
-A **mutable object** is an object whose contents can be modified after it has been created.
-
-Common mutable data types in Python include:
-
-- List (`list`)
-- Dictionary (`dict`)
-- Set (`set`)
-- Bytearray (`bytearray`)
-
-Unlike immutable objects, mutable objects allow in-place modification.
-
----
-
-# Why are Mutable Objects Different?
-
-When a mutable object is passed to a function,
-
-both the original variable and the function parameter initially refer to the **same object**.
-
-If the object is modified,
-
-the modification is visible everywhere because **both variables still point to the same object**.
-
----
-
-# Example 1 – Modifying a List using `append()`
-
-```python
-def show(a):
-
-    a.append(40)
-
-    print("Inside show:", a)
-
-a = [10, 20, 30]
-
-print("Before calling:", a)
-
-show(a)
-
-print("After calling:", a)
-```
-
-### Output
+Execution
 
 ```text
-Before calling: [10, 20, 30]
-
-Inside show: [10, 20, 30, 40]
-
-After calling: [10, 20, 30, 40]
-```
-
----
-
-# Dry Run
-
-Initially,
-
-```
-Global Memory
+2
 
 ↓
 
-a
+2×2
 
 ↓
 
-[10,20,30]
-```
+4
 
-Now the function is called.
+------------
 
-Python passes the reference to the list.
-
-Memory becomes
-
-```
-Global Variable
+3
 
 ↓
 
-List Object
+3×3
 
 ↓
 
-[10,20,30]
+9
 
-↑
+------------
 
-Function Parameter
-```
-
-Notice that both variables point to the **same list object**.
-
----
-
-# What Happens During `append()`?
-
-Python executes
-
-```python
-a.append(40)
-```
-
-The `append()` method modifies the existing list object.
-
-It **does not create a new list**.
-
-Memory changes to
-
-```
-List Object
+6
 
 ↓
 
-[10,20,30,40]
-```
-
-Since both references point to the same object,
-
-both variables observe the updated list.
-
----
-
-# Memory Diagram
-
-Before Function Call
-
-```
-Global a
+6×6
 
 ↓
 
-List
+36
+
+------------
+
+8
 
 ↓
 
-[10,20,30]
-```
-
-During Function Call
-
-```
-Global a
+8×8
 
 ↓
 
-List
+64
+
+------------
+
+4
 
 ↓
 
-[10,20,30]
-
-↑
-
-Function a
-```
-
-After `append()`
-
-```
-Global a
+4×4
 
 ↓
 
-List
-
-↓
-
-[10,20,30,40]
-
-↑
-
-Function a
-```
-
-Both variables still refer to the same list object.
-
----
-
-# Important Observation
-
-The statement
-
-```python
-a.append(40)
-```
-
-does **not** create another list.
-
-Instead,
-
-it modifies the existing list object.
-
-This is why the original list also changes.
-
----
-
-# Example 2 – Reassigning the List
-
-Now consider another example discussed in class.
-
-```python
-def show(a):
-
-    a = [40, 50, 60]
-
-    print("Inside show:", a)
-
-a = [10, 20, 30]
-
-print("Before calling:", a)
-
-show(a)
-
-print("After calling:", a)
-```
-
-### Output
-
-```text
-Before calling: [10, 20, 30]
-
-Inside show: [40, 50, 60]
-
-After calling: [10, 20, 30]
-```
-
----
-
-# Why Didn't the Original List Change?
-
-Many students expect the output to be
-
-```text
-[40, 50, 60]
-```
-
-But that is **incorrect**.
-
-The reason is that
-
-```python
-a = [40, 50, 60]
-```
-
-is **assignment**, not modification.
-
-Assignment creates a **completely new list object**.
-
----
-
-# Dry Run
-
-Initially,
-
-```
-Global Variable
-
-↓
-
-List A
-
-↓
-
-[10,20,30]
-```
-
-Function starts.
-
-Both references point to List A.
-
-```
-Global a
-
-↓
-
-List A
-
-↓
-
-[10,20,30]
-
-↑
-
-Function a
-```
-
-Now Python executes
-
-```python
-a = [40,50,60]
+16
 ```
 
 Python creates
 
+```text
+Map Object
+
+↓
+
+Convert to List
+
+↓
+
+[4,9,36,64,16]
 ```
-List B
-
-↓
-
-[40,50,60]
-```
-
-The function parameter now points to List B.
-
-Memory becomes
-
-```
-Global a
-
-↓
-
-List A
-
-↓
-
-[10,20,30]
-
-
-Function a
-
-↓
-
-List B
-
-↓
-
-[40,50,60]
-```
-
-The connection between the two variables is broken.
-
-Therefore,
-
-the original list remains unchanged.
 
 ---
 
-# Method Call vs Assignment
+# Why is Lambda Better Here?
 
-This is one of the most important comparisons of the lecture.
-
-## Case 1 – Method Call
+Without Lambda
 
 ```python
-a.append(40)
+def square(n):
+    return n*n
+
+result = map(square, numbers)
 ```
 
-Result
+With Lambda
 
-```
-Same Object
-
-↓
-
-Modified
+```python
+result = map(lambda x:x*x, numbers)
 ```
 
-Original list changes.
+No separate function is required.
+
+The code becomes shorter and cleaner.
 
 ---
 
-## Case 2 – Assignment
+# One-Line Version
+
+The instructor also demonstrated the shortest possible solution.
 
 ```python
-a = [40,50,60]
-```
-
-Result
-
-```
-New Object
-
-↓
-
-Reference Updated
-```
-
-Original list remains unchanged.
-
----
-
-# Another Example
-
-```python
-def add_item(lst):
-
-    lst.append("Python")
-
-subjects = ["Java", "C"]
-
-add_item(subjects)
-
-print(subjects)
+print(list(map(lambda x: x * x, [2, 3, 6, 8, 4])))
 ```
 
 ### Output
 
 ```text
-['Java', 'C', 'Python']
+[4, 9, 36, 64, 16]
 ```
 
-Reason:
-
-`append()` modifies the original list.
+Everything happens in a single statement.
 
 ---
 
-# Another Example
+# Comparison
+
+## Using `for` Loop
 
 ```python
-def change_list(lst):
-
-    lst = ["HTML", "CSS"]
-
-subjects = ["Java", "Python"]
-
-change_list(subjects)
-
-print(subjects)
+for x in numbers:
+    print(square(x))
 ```
-
-### Output
-
-```text
-['Java', 'Python']
-```
-
-Reason:
-
-Assignment creates a new list.
 
 ---
 
-# Immutable vs Mutable Behaviour
-
-| Immutable Objects | Mutable Objects |
-|-------------------|-----------------|
-| Cannot be modified | Can be modified |
-| Assignment creates a new object | Methods modify the existing object |
-| Original object remains unchanged | Original object changes |
-| Examples: int, float, str, tuple | Examples: list, dict, set |
-
----
-
-# Common Mistakes
-
-## Mistake 1
-
-Thinking
+## Using `map()`
 
 ```python
-append()
+list(map(square, numbers))
 ```
-
-creates a new list.
-
-It doesn't.
-
-It modifies the same list.
 
 ---
 
-## Mistake 2
-
-Thinking
+## Using `map()` + Lambda
 
 ```python
-a = [1,2,3]
+list(map(lambda x:x*x, numbers))
 ```
 
-modifies the original list.
-
-It doesn't.
-
-It creates a new list object.
+This is the cleanest approach.
 
 ---
 
-## Mistake 3
+# Advantages of `map()`
 
-Confusing assignment with modification.
-
-Remember:
-
-- Assignment (`=`) → New Object
-- Methods (`append()`, `extend()`, `remove()`) → Modify Existing Object
+- Less code
+- More readable
+- No explicit loop
+- Faster to write
+- Commonly used in Python libraries
+- Works beautifully with Lambda Functions
 
 ---
 
 # Interview Questions
 
-### Q1. Why does `append()` modify the original list?
+### Q1. What does `map()` return?
 
-Because `append()` changes the existing list object instead of creating a new one.
-
----
-
-### Q2. Why doesn't assignment modify the original list?
-
-Because assignment creates a new object and changes only the local reference.
+A **map object**.
 
 ---
 
-### Q3. Which data types are mutable?
+### Q2. How do we display the results?
 
-- List
-- Dictionary
-- Set
-- Bytearray
+Convert it into a list.
+
+```python
+list(map(...))
+```
 
 ---
 
-### Q4. Which data types are immutable?
+### Q3. Why do we pass `square` instead of `square()`?
 
-- Integer
-- Float
-- Boolean
-- String
-- Tuple
+Because `square` is the function object.
+
+`square()` executes the function immediately.
+
+---
+
+### Q4. Can `map()` be used with Lambda Functions?
+
+**Yes.**
+
+This is one of the primary uses of Lambda Functions.
 
 ---
 
 # Key Takeaways
 
-- Python passes references to objects.
-- Mutable objects can be modified in place.
-- List methods modify the original object.
-- Assignment creates a new object.
-- Whether changes are visible outside the function depends on whether the original object is modified or a new object is created.
+- `map()` applies a function to every element of an iterable.
+- It returns a **map object**.
+- Use `list()` to display the mapped values.
+- Pass the **function name**, not the function call.
+- Lambda Functions make `map()` code shorter and cleaner.
+- `map()` is one of the most common real-world applications of Lambda Functions.
 
 ---
 
-# Next Topic
-
-In the final section of this lecture, we'll understand **why Python behaves this way internally**, compare mutable and immutable objects side by side, discuss **Pass by Object Reference** in depth, and conclude the lecture with interview questions and a complete summary.
-
----
-
-> **End of Part 6**
-============================================================================================================================================================================================================================================================================================
-# Deep Dive into Pass by Object Reference
-
-In the previous sections, we studied how **immutable** and **mutable** objects behave when passed to functions.
-
-Many beginners memorize the outputs of the programs but fail to understand **why** Python behaves differently in each case.
-
-To truly master this topic, we need to understand two important concepts:
-
-1. **Objects**
-2. **References**
-
-Once these concepts become clear, you will be able to predict the output of almost every function-related interview question.
-
----
-
-# Everything in Python is an Object
-
-One of Python's most important design philosophies is:
-
-> **Everything in Python is an Object.**
-
-Examples:
-
-- Integer → Object
-- Float → Object
-- Boolean → Object
-- String → Object
-- List → Object
-- Tuple → Object
-- Dictionary → Object
-- Function → Object
-
-Variables themselves **do not store data**.
-
-Instead,
-
-they store a **reference** to an object.
-
----
-
-# Variables Store References
-
-Consider
-
-```python
-a = 10
-```
-
-Many beginners imagine memory like this:
-
-```
-a
-↓
-
-10
-```
-
-This is **incorrect**.
-
-Python actually stores
-
-```
-Variable
-
-↓
-
-Reference
-
-↓
-
-Object
-
-↓
-
-10
-```
-
-The variable only stores the address (reference) of the object.
-
----
-
-# Example
-
-```python
-a = 10
-
-b = a
-```
-
-Memory
-
-```
-        Integer Object
-             10
-            ↑  ↑
-            │  │
-            a  b
-```
-
-Notice carefully.
-
-Python does **not** create another integer object.
-
-Both variables refer to the same object.
-
----
-
-# Reassignment Creates a New Object
-
-Now execute
-
-```python
-b = 20
-```
-
-Since integers are immutable,
-
-Python creates another integer object.
-
-Memory becomes
-
-```
-      Integer Object
-           10
-           ↑
-           │
-           a
-
-
-      Integer Object
-           20
-           ↑
-           │
-           b
-```
-
-The original integer
-
-```
-10
-```
-
-was never modified.
-
-Only the reference stored inside `b` changed.
-
----
-
-# Why Lists Behave Differently
-
-Now consider
-
-```python
-a = [10,20,30]
-
-b = a
-```
-
-Memory
-
-```
-          List Object
-
-      [10,20,30]
-
-         ↑      ↑
-
-         │      │
-
-         a      b
-```
-
-Again,
-
-both variables refer to the same list object.
-
----
-
-# Using append()
-
-Now execute
-
-```python
-b.append(40)
-```
-
-The method modifies the existing object.
-
-Memory becomes
-
-```
-          List Object
-
-   [10,20,30,40]
-
-         ↑      ↑
-
-         │      │
-
-         a      b
-```
-
-Since both variables refer to the same object,
-
-both variables observe the modification.
-
----
-
-# Assignment is Different
-
-Now execute
-
-```python
-b = [40,50,60]
-```
-
-Python creates a brand new list.
-
-Memory becomes
-
-```
-        List A
-
-   [10,20,30]
-
-      ↑
-
-      │
-
-      a
-
-
-
-        List B
-
-   [40,50,60]
-
-      ↑
-
-      │
-
-      b
-```
-
-The original list remains unchanged.
-
----
-
-# Golden Rule
-
-Whenever you see a function,
-
-ask yourself only one question.
-
-> **Did Python modify the existing object or create a new object?**
-
-If the object is modified,
-
-all references observe the change.
-
-If a new object is created,
-
-only the local reference changes.
-
----
-
-# Method Call vs Assignment
-
-This comparison is extremely important for interviews.
-
-## Case 1
-
-```python
-a.append(40)
-```
-
-```
-Existing Object
-
-↓
-
-Modified
-```
-
-Original list changes.
-
----
-
-## Case 2
-
-```python
-a = [40,50]
-```
-
-```
-New Object
-
-↓
-
-Reference Changed
-```
-
-Original list remains unchanged.
-
----
-
-# Predict the Output
-
-## Example 1
-
-```python
-def show(a):
-
-    a.append(100)
-
-numbers = [10,20]
-
-show(numbers)
-
-print(numbers)
-```
-
-### Output
-
-```text
-[10, 20, 100]
-```
-
-Reason:
-
-`append()` modifies the original list object.
-
----
-
-## Example 2
-
-```python
-def show(a):
-
-    a = [100]
-
-numbers = [10,20]
-
-show(numbers)
-
-print(numbers)
-```
-
-### Output
-
-```text
-[10, 20]
-```
-
-Reason:
-
-Assignment creates a new list object.
-
----
-
-## Example 3
-
-```python
-def show(a):
-
-    a = a + [40]
-
-numbers = [10,20]
-
-show(numbers)
-
-print(numbers)
-```
-
-### Output
-
-```text
-[10, 20]
-```
-
----
-
-## Why?
-
-Many students think
-
-```python
-a + [40]
-```
-
-modifies the list.
-
-It **does not**.
-
-The `+` operator creates a **new list**.
-
-Equivalent to
-
-```
-Old List
-
-↓
-
-Create Copy
-
-↓
-
-Append 40
-
-↓
-
-Return New List
-```
-
-Therefore,
-
-the original list remains unchanged.
-
----
-
-# Summary Table
-
-| Operation | Modifies Original Object? |
-|-----------|---------------------------|
-| `append()` | ✅ Yes |
-| `extend()` | ✅ Yes |
-| `insert()` | ✅ Yes |
-| `remove()` | ✅ Yes |
-| `pop()` | ✅ Yes |
-| `sort()` | ✅ Yes |
-| `reverse()` | ✅ Yes |
-| Assignment (`=`) | ❌ No |
-| `+` Operator | ❌ No |
-| List Slicing (`[:]`) | ❌ Creates a New List |
-
----
-
-# Common Mistakes
-
-## Mistake 1
-
-Thinking
-
-```python
-a.append(40)
-```
-
-creates another list.
-
-It doesn't.
-
----
-
-## Mistake 2
-
-Thinking
-
-```python
-a = [1,2,3]
-```
-
-modifies the original list.
-
-It doesn't.
-
----
-
-## Mistake 3
-
-Confusing **modification** with **reassignment**.
-
-Remember:
-
-- Methods → Modify existing object.
-- Assignment → Create new object.
-
----
-
-# Frequently Asked Interview Questions
-
-### Q1. Does Python use Pass by Value?
-
-**No.**
-
----
-
-### Q2. Does Python use Pass by Reference?
-
-**No.**
-
----
-
-### Q3. What argument passing mechanism does Python use?
-
-**Pass by Object Reference** (also known as **Call by Sharing**).
-
----
-
-### Q4. Why do integers remain unchanged after a function call?
-
-Because integers are **immutable**. Reassignment creates a new object.
-
----
-
-### Q5. Why does `append()` modify the original list?
-
-Because it modifies the existing list object instead of creating a new one.
-
----
-
-### Q6. Why doesn't assignment modify the original list?
-
-Because assignment changes the reference to a newly created object.
-
----
-
+> **End of Part 5**
+==============================================================================================================================================================
 # Complete Lecture Summary
 
-In this lecture, we explored Python's **scope rules** and **argument passing mechanism** in depth.
+In this lecture, we explored one of Python's most powerful functional programming features — **Anonymous Functions**, commonly known as **Lambda Functions**, along with their most common application using the **`map()`** function.
 
-We learned the difference between **Global Variables** and **Local Variables**, understood how Python resolves variables using scope, and saw that function definitions are stored first and executed only when called.
+Unlike traditional functions created using the `def` keyword, Lambda Functions allow us to create **small, anonymous, one-line functions** without explicitly defining a function name. They are especially useful when a function is required only once or for a very short duration.
 
-We studied **Variable Shadowing**, where a local variable hides a global variable with the same name, and learned how the `global` keyword allows us to modify global variables from inside functions.
+---
 
-Next, we explored **UnboundLocalError**, one of Python's most confusing beginner errors, and understood that Python scans the entire function before execution. If an assignment to a variable is found anywhere inside the function, Python treats that variable as local throughout the function.
+# What We Learned
 
-We also learned that Python **does not have block-level scope**. Statements such as `if`, `for`, and `while` do not create a new scope. Only **functions**, **classes**, and **modules** create their own scope.
+## 1. Anonymous (Lambda) Functions
 
-Finally, we studied **Pass by Object Reference**, Python's unique argument-passing mechanism. We compared immutable and mutable objects, observed why integers remain unchanged after reassignment inside functions, and why methods like `append()` modify the original list while assignment creates a completely new object.
+A Lambda Function is simply a function without a name.
+
+Instead of using
+
+```python
+def
+```
+
+we use
+
+```python
+lambda
+```
+
+General Syntax
+
+```python
+lambda arguments: expression
+```
+
+Example
+
+```python
+lambda a, b: a + b
+```
+
+---
+
+## 2. Characteristics of Lambda Functions
+
+- Anonymous (No Function Name)
+- Defined using the `lambda` keyword
+- Usually written in one line
+- Automatically returns the result
+- Can contain only one expression
+- Mostly used for small tasks
+
+---
+
+## 3. Restrictions of Lambda Functions
+
+A Lambda Function **cannot contain**
+
+- Multiple statements
+- `return`
+- Assignment (`=`)
+- `for` loop
+- `while` loop
+- Multi-line function body
+
+A Lambda Function **can contain**
+
+- Arithmetic expressions
+- Relational expressions
+- Logical expressions
+- Function calls
+- String operations
+- Single-Line If-Else expressions
+
+---
+
+## 4. Lambda Function Examples
+
+### Addition of Three Numbers
+
+```python
+add = lambda a, b, c: a + b + c
+
+print(add(2, 3, 4))
+```
+
+Output
+
+```text
+9
+```
+
+---
+
+### Lambda Without Arguments
+
+```python
+import math
+
+pi_value = lambda: math.pi
+
+print(pi_value())
+```
+
+Output
+
+```text
+3.141592653589793
+```
+
+---
+
+### First Character of a String
+
+```python
+first_char = lambda string: string[0]
+
+print(first_char("Bhopal"))
+```
+
+Output
+
+```text
+B
+```
+
+---
+
+### Last Character of a String
+
+```python
+last_char = lambda string: string[-1]
+
+print(last_char("Python"))
+```
+
+Output
+
+```text
+n
+```
+
+---
+
+### Even Number Check
+
+```python
+is_even = lambda n: n % 2 == 0
+
+print(is_even(10))
+```
+
+Output
+
+```text
+True
+```
+
+---
+
+### Even or Odd
+
+```python
+check = lambda n: "Even" if n % 2 == 0 else "Odd"
+
+print(check(7))
+```
+
+Output
+
+```text
+Odd
+```
+
+---
+
+### Maximum of Two Numbers
+
+```python
+maximum = lambda a, b: a if a > b else b
+
+print(maximum(10, 15))
+```
+
+Output
+
+```text
+15
+```
+
+---
+
+# The `map()` Function
+
+After understanding Lambda Functions, we learned the **`map()`** function.
+
+The `map()` function applies a given function to every element of an iterable and returns a **map object**.
+
+General Syntax
+
+```python
+map(function, iterable)
+```
+
+Example
+
+```python
+numbers = [2, 3, 6, 8, 4]
+
+result = map(lambda x: x * x, numbers)
+
+print(list(result))
+```
+
+Output
+
+```text
+[4, 9, 36, 64, 16]
+```
+
+---
+
+# How `map()` Works
+
+Suppose
+
+```python
+numbers = [2, 3, 6]
+```
+
+Execution Flow
+
+```text
+2
+↓
+lambda
+↓
+4
+
+3
+↓
+lambda
+↓
+9
+
+6
+↓
+lambda
+↓
+36
+```
+
+Final Result
+
+```text
+[4, 9, 36]
+```
+
+---
+
+# Why `list()` is Required
+
+The `map()` function does **not** return a list.
+
+It returns a **map object**.
+
+```python
+result = map(lambda x: x*x, numbers)
+
+print(result)
+```
+
+Output
+
+```text
+<map object at 0x...>
+```
+
+To display the actual values,
+
+convert the map object into a list.
+
+```python
+print(list(result))
+```
+
+---
+
+# Traditional Approach vs `map()`
+
+### Traditional Method
+
+```python
+def square(n):
+    return n * n
+
+numbers = [2, 3, 6, 8, 4]
+
+for num in numbers:
+    print(square(num))
+```
+
+---
+
+### Using `map()`
+
+```python
+def square(n):
+    return n * n
+
+numbers = [2, 3, 6, 8, 4]
+
+result = list(map(square, numbers))
+
+print(result)
+```
+
+---
+
+### Using `map()` + Lambda
+
+```python
+numbers = [2, 3, 6, 8, 4]
+
+result = list(map(lambda x: x * x, numbers))
+
+print(result)
+```
+
+This is the shortest and most Pythonic solution.
+
+---
+
+# Why Lambda Functions are Popular
+
+Lambda Functions are widely used because they
+
+- reduce code size
+- improve readability for simple operations
+- eliminate unnecessary function definitions
+- integrate perfectly with higher-order functions like `map()`
+- are heavily used in Data Science and Machine Learning libraries
+
+---
+
+# Interview Questions
+
+### Q1. What is a Lambda Function?
+
+A Lambda Function is an anonymous function created using the `lambda` keyword.
+
+---
+
+### Q2. Can a Lambda Function contain multiple statements?
+
+No.
+
+It can contain only one expression.
+
+---
+
+### Q3. Is the `return` keyword used in Lambda Functions?
+
+No.
+
+The expression is returned automatically.
+
+---
+
+### Q4. Can loops be written inside Lambda Functions?
+
+No.
+
+`for` and `while` are statements and are not allowed.
+
+---
+
+### Q5. Can Single-Line If-Else be used?
+
+Yes.
+
+Because it is an expression.
+
+---
+
+### Q6. What does the `map()` function return?
+
+A **map object**.
+
+---
+
+### Q7. Why do we use `list()` with `map()`?
+
+To convert the map object into a list so that the values can be displayed.
+
+---
+
+### Q8. What should be passed as the first argument to `map()`?
+
+The **function itself**, not the function call.
+
+Correct
+
+```python
+map(square, numbers)
+```
+
+Incorrect
+
+```python
+map(square(), numbers)
+```
 
 ---
 
 # Quick Revision
 
-- Variable Scope defines where a variable can be accessed.
-- Variables declared outside functions are Global Variables.
-- Variables declared inside functions are Local Variables.
-- Function parameters are Local Variables.
-- Local variables are destroyed after the function returns.
-- Assignment inside a function creates a local variable by default.
-- The `global` keyword allows modification of global variables.
-- Python scans the function before execution.
-- `UnboundLocalError` occurs when a local variable is accessed before assignment.
-- Python does not have block-level scope.
-- Functions, classes, and modules create scopes.
-- Python uses **Pass by Object Reference**.
-- Immutable objects create new objects during reassignment.
-- Mutable objects can be modified in place.
-- Methods like `append()` modify the original object.
-- Assignment (`=`) changes the reference to a new object.
+- Lambda Functions are anonymous functions.
+- They are created using the `lambda` keyword.
+- Lambda Functions contain only one expression.
+- They automatically return the expression's value.
+- Assignment, loops, and multiple statements are not allowed.
+- Single-Line If-Else expressions are allowed.
+- `map()` applies a function to every element of an iterable.
+- `map()` returns a map object.
+- Convert the map object into a list using `list()`.
+- Lambda Functions are commonly used with `map()` because they avoid creating unnecessary named functions.
 
 ---
 
 # Key Takeaway
 
-> **In Python, variables do not store values—they store references to objects.**
+> **Use a normal function (`def`) when the logic is large or reused multiple times.**
 >
-> Understanding this single concept makes topics like **scope, mutable vs immutable objects, and argument passing** much easier to understand.
+> **Use a Lambda Function when the logic is small, simple, and needed only temporarily—especially with functions like `map()`.**
 
 ---
 
-**🎉 End of Lecture 21 – Globals, Locals & Argument Passing**
+# What's Next?
+
+In the next lecture, you'll continue functional programming concepts by exploring additional higher-order functions such as **`filter()`** (and possibly `reduce()`, depending on the course sequence), where Lambda Functions become even more useful.
+
+---
+
+
+- They are mostly written in one line.
+- They automatically return the result.
+- They are widely used with `map()`, `filter()`, and other higher-order functions.
