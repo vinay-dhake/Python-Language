@@ -1,7 +1,7 @@
 
 # Python Programming 🐍
 
-# Lecture 25: List Operations, Modification & Global Functions
+# Lecture 24: List Operations, Modification & Global Functions
 
 > **Topics Covered**
 >
